@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import axiosApi from "../../axiosApi.ts";
 import { Dish } from "../../types";
 import DishForm from "../DishForm/DishForm.tsx";
-import ToolBarAdmin from "../ToolBar/ToolBarAdmin.tsx";
 
 const EditDish = () => {
     const navigate = useNavigate();
