@@ -2,7 +2,12 @@ export interface DishItem {
     id: string;
     name: string;
     price: number;
-    image: string;
+    image?: string;
+    counter?: number;
+}
+
+export interface CartItem extends DishItem {
+    quantity: number;
 }
 
 export interface Dish {

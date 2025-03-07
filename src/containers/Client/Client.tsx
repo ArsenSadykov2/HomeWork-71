@@ -13,7 +13,6 @@ const imageUrl = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4OMj5wU
 const Client = () => {
     const [dishes, setDishes] = useState<DishItem[]>([]);
     const [loading, setLoading] = useState(true);
-    const [showModal, setShowModal] = useState<boolean>(false);
     const [selectedDish, setSelectedDish] = useState<DishItem | null>(null);
     const [cart, setCart] = useState<DishItem[]>([]);
     const [showCartModal, setShowCartModal] = useState<boolean>(false);
@@ -51,15 +50,9 @@ const Client = () => {
         }
     }, [fetchDishes, location.pathname]);
 
-
-    const closeModal = () => {
-        setShowModal(false);
-        setSelectedDish(null);
-    };
-
     const deleteDish = async (id: string) => {
         try {
-            await axiosApi.delete(`/pizza-dishes/${id}.json`);
+            await axiosApi.delete(`/pizza-orders/${id}.json`);
             setDishes(dishes.filter(dish => dish.id !== id));
         } catch (e) {
             console.error("Ошибка при удалении блюда:", e);
@@ -82,6 +75,28 @@ const Client = () => {
         setShowCartModal(false);
     };
 
+    const calculateTotal = () => {
+        return cart.reduce((total, dish) => total + Number(dish.price), 150);
+    };
+
+    const removeFromCart = (id: string) => {
+        setCart((prevCart) => prevCart.filter((dish) => dish.id !== id));
+    };
+
+    const handleCancel = () => {
+        setShowCartModal(false);
+    };
+
+    const handleOrder = async () => {
+        try {
+            await axiosApi.post('/pizza-orders.json', { items: cart, total: calculateTotal() });
+            setCart([]);
+            setShowCartModal(false);
+        } catch (e) {
+            console.error("Ошибка при отправке заказа:", e);
+        }
+    };
+
     return (
         <>
             <header><ToolBarClient /></header>
@@ -96,41 +111,37 @@ const Client = () => {
                                 onAddToCart={addToCart}
                             />
                         </div>
-                        <Modal show={showModal} title="Информация о контакте" onClose={closeModal}>
-                            <div className="modal-body">
-                                {selectedDish && (
-                                    <>
-                                        <img src={selectedDish.image ? selectedDish.image : imageUrl}
-                                             alt={selectedDish.name} className="img-fluid mb-3" />
-                                        <hr />
-                                        <h4>Name: {selectedDish.name}</h4>
-                                        <p><strong>Название:</strong> {selectedDish.name}</p>
-                                        <p><strong>Цена:</strong> {selectedDish.price}</p>
-                                    </>
-                                )}
-                            </div>
-                            <hr />
-                            <div className="d-flex justify-content-end gap-2 mt-3">
-                                <button className="btn btn-danger" onClick={() => deleteDish(selectedDish!.id)}>
-                                    Удалить
-                                </button>
-                            </div>
-                        </Modal>
-
                         <button className="btn btn-success mt-3" onClick={handleCheckout}>
                             Checkout ({cart.length})
                         </button>
 
                         <Modal show={showCartModal} title="Корзина" onClose={closeCartModal}>
                             <div style={{ padding: "10px" }}>
-                                <Cart cart={cart} />
-                                <div style={{ marginTop: "10px", textAlign: "right" }}>
+                                <Cart cart={cart} onRemove={removeFromCart} />
+                                <div style={{marginTop: "10px", textAlign: "right"}}>
+                                    {selectedDish && (
+                                        <>
+                                            <img src={selectedDish.image ? selectedDish.image : imageUrl}
+                                                 alt={selectedDish.name} className="img-fluid mb-3" />
+                                            <hr />
+                                            <h4>Name: {selectedDish.name}</h4>
+                                            <p><strong>Название:</strong> {selectedDish.name}</p>
+                                            <p><strong>Цена:</strong> {selectedDish.price}</p>
+                                        </>
+                                    )}
+                                    <h4>Общая сумма: {calculateTotal()} руб.</h4>
                                     <button
-                                        className="btn btn-primary"
-                                        onClick={closeCartModal}
-                                        style={{ fontSize: "14px", padding: "5px 10px" }}
+                                        className="btn btn-danger"
+                                        onClick={handleCancel}
+                                        style={{marginRight: "10px"}}
                                     >
-                                        Закрыть
+                                        Cancel
+                                    </button>
+                                    <button
+                                        className="btn btn-success"
+                                        onClick={handleOrder}
+                                    >
+                                        Order
                                     </button>
                                 </div>
                             </div>

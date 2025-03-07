@@ -4,6 +4,7 @@ import Client from "./containers/Client/Client.tsx";
 import {Route, Routes} from "react-router-dom";
 import NewDish from "./containers/NewDish/NewDish.tsx";
 import EditDish from "./components/EditDish/EditDish.tsx";
+import Orders from "./components/Orders/Orders.tsx";
 
 const App = () => (
     <>
@@ -19,7 +20,7 @@ const App = () => (
             />
             <Route
                 path="/admin/orders"
-                element={(<Admin/>)}
+                element={(<Orders/>)}
             />
             <Route
                 path="/"
