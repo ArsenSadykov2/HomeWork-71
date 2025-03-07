@@ -16,8 +16,9 @@ const Cart: React.FC<CartProps> = ({ cart, onRemove }) => {
                 <ul>
                     {cart.map((dish) => (
                         <li key={dish.id}>
-                            <span>{dish.name} - {dish.price} руб.</span>
+                            <span className="me-5">{dish.name} - {dish.price} руб.</span>
                             <button
+                                className="btn btn-danger"
                                 onClick={() => onRemove(dish.id)}
                                 style={{ marginLeft: '10px' }}
                             >
