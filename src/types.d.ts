@@ -6,10 +6,6 @@ export interface DishItem {
     counter?: number;
 }
 
-export interface CartItem extends DishItem {
-    quantity: number;
-}
-
 export interface Dish {
     name: string;
     price: number;
