@@ -9,7 +9,6 @@ import Dishes from "../../components/Dishes/Dishes.tsx";
 const Admin = () => {
     const [dishes, setDishes] = useState<DishItem[]>([]);
     const [loading, setLoading] = useState(true);
-    const [selectedDish, setSelectedDish] = useState<DishItem | null>(null);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -39,51 +38,39 @@ const Admin = () => {
     }, []);
 
     useEffect(() => {
-        if (location.pathname === '/admin') {
+        if (location.pathname === '/') {
             void fetchDishes();
         }
     }, [fetchDishes, location.pathname]);
 
-    const handleContactClick = (contact: DishItem) => {
-        setSelectedDish(contact);
-    };
-
-    const deleteContact = async () => {
-        if (selectedDish && selectedDish.id) {
-            try {
-                await axiosApi.delete(`/pizza-dishes/${selectedDish.id}.json`);
-                setDishes(dishes.filter(dish => dish.id !== selectedDish.id));
-            } catch (e) {
-                console.error("Ошибка при удалении контакта:", e);
-            }
+    const deleteDish = async (id: string) => {
+        try {
+            await axiosApi.delete(`/pizza-dishes/${id}.json`);
+            setDishes(dishes.filter(dish => dish.id !== id));
+        } catch (e) {
+            console.error("Ошибка при удалении блюда:", e);
         }
     };
 
-    const editContact = () => {
-        if (selectedDish) {
-            navigate(`/edit-dishes/${selectedDish.id}`);
-        }
+    const editDish = (id: string) => {
+        navigate(`/edit-dishes/${id}`);
     };
 
     return (
         <>
-            <header className="container mb-2">
+            <header className="mb-2">
                 <ToolBarAdmin />
             </header>
             {loading ? (
                 <Loader />
             ) : (
-                <main>
+                <main className="container">
                     <div className="container">
-                        <Dishes dishes={dishes} onClickItem={handleContactClick} />
-                        <div className="d-flex justify-content-end gap-2 mt-3">
-                            <button className="btn btn-danger" onClick={deleteContact}>
-                                Удалить
-                            </button>
-                            <button className="btn btn-primary" onClick={editContact}>
-                                Редактировать
-                            </button>
-                        </div>
+                        <Dishes
+                            dishes={dishes}
+                            onDelete={deleteDish}
+                            onEdit={editDish}
+                        />
                     </div>
                 </main>
             )}
