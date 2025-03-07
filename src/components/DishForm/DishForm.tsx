@@ -1,5 +1,4 @@
 import {ChangeEvent, FormEvent, useEffect, useState} from "react";
-import {NavLink} from "react-router-dom";
 import {Dish} from "../../types";
 import ToolBarAdmin from "../ToolBar/ToolBarAdmin.tsx";
 
@@ -73,7 +72,7 @@ const DishForm: React.FC<Props> = ({onSubmitFormToAddDish, editContact}) => {
                                 className="btn btn-primary me-5"
                                 type="submit"
                             >
-                                <NavLink to='/' className="navbar-brand">Save</NavLink>
+                                Save
                             </button>
                         </div>
                     </form>

@@ -17,7 +17,7 @@ const EditDish = () => {
                 const response = await axiosApi.get<Dish>(`/pizza-dishes/${idDish}.json`);
                 setDish(response.data);
             } catch (error) {
-                console.error("Ошибка при загрузке контакта:", error);
+                console.error("Ошибка при загрузке блюда:", error);
             } finally {
                 setLoading(false);
             }
@@ -28,13 +28,13 @@ const EditDish = () => {
         }
     }, [idDish]);
 
-    const updateContact = async (updatedContact: Dish) => {
+    const updateContact = async (updatedDish: Dish) => {
         try {
             setLoading(true);
-            await axiosApi.put(`/contacts/${idDish}.json`, updatedContact);
-            navigate('/');
+            await axiosApi.put(`/pizza-dishes/${idDish}.json`, updatedDish);
+            navigate('/admin');
         } catch (error) {
-            console.error("Ошибка при обновлении контакта:", error);
+            console.error("Ошибка при обновлении блюда:", error);
         } finally {
             setLoading(false);
         }

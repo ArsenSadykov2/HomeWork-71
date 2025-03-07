@@ -38,10 +38,10 @@ const Admin = () => {
     }, []);
 
     useEffect(() => {
-        if (location.pathname === '/') {
+        if (location.pathname === '/admin') {
             void fetchDishes();
         }
-    }, [fetchDishes, location.pathname]);
+    }, [fetchDishes, location.pathname, location.key]);
 
     const deleteDish = async (id: string) => {
         try {
@@ -53,7 +53,7 @@ const Admin = () => {
     };
 
     const editDish = (id: string) => {
-        navigate(`/edit-dishes/${id}`);
+        navigate(`/admin/edit-dishes/${id}`);
     };
 
     return (
@@ -70,6 +70,7 @@ const Admin = () => {
                             dishes={dishes}
                             onDelete={deleteDish}
                             onEdit={editDish}
+                            onAddToCart={() => {}}
                         />
                     </div>
                 </main>

@@ -9,23 +9,23 @@ const App = () => (
     <>
         <Routes>
             <Route
-                path="/"
+                path="/admin"
                 element={(
                     <Admin/>)}
             />
             <Route
-                path="/new-dish"
+                path="/admin/new-dish"
                 element={(<NewDish/>)}
             />
             <Route
-                path="/orders"
+                path="/admin/orders"
                 element={(<Admin/>)}
             />
             <Route
-                path="/client"
+                path="/"
                 element={(<Client/>)}
             />
-            <Route path='/edit-dishes/:idDish' element={<EditDish/>}></Route>
+            <Route path='/admin/edit-dishes/:idDish' element={<EditDish/>}></Route>
             <Route path="*" element={(<h1>Not page found</h1>)}/>
         </Routes>
     </>
